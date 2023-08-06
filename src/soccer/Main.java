@@ -18,46 +18,40 @@ public class Main {
 		// Database connection
 		dbc.connect();
 
-		// ¸Ş´º¼±ÅÃ
-		boolean flag = false;
+		// ë©”ë‰´ì„ íƒ
+	SoccerFacade soccerFacade = new SoccerFacade();
 
-		while (!flag) {
+    	boolean flag = false;
 
-			int num = displayMenu();
+    	while (!flag) {
+        	int num = displayMenu();
 
-			switch (num) {
-			case INPUT:
-				playerInputData();
-				break;
-			case UPDATE:
-				UpdatePlayerData();
-				break;
-			case DELETE:
-				deletePlayerData();
-				break;
-			case SEARCH:
-				searchPlayerData();
-				break;
-			case OUTPUT:
-				playerOutput();
-				break;
-			case SORT:
-				sortPlayerData();
-				break;
-			case STATS:
-				statictPlayerData();
-				break;
-			case EXIT:
-				flag = true;
-				break;
-			default:
-				System.out.println("1~7¹øÁß¿¡ ¼±ÅÃÇØÁÖ¼¼¿ä.");
-				break;
-			}
+	        switch (num) {
+	            case INPUT:
+	                soccerFacade.playerInputData();
+	                break;
+	            case UPDATE:
+	                soccerFacade.updatePlayerData();
+	                break;
+	            case DELETE:
+	                soccerFacade.deletePlayerData();
+	                break;
+	            case SEARCH:
+	                soccerFacade.searchPlayerData();
+	                break;
+	            case OUTPUT:
+	                soccerFacade.playerOutput();
+	                break;
+	            // ...
+	        }
+	    }
+
+    // Cerrar la conexiÃ³n a la base de datos al salir del programa
+    soccerFacade.closeConnection();
 
 		} // end of while
 
-		System.out.println("½Ã½ºÅÛ Á¾·á");
+		System.out.println("ì‹œìŠ¤í…œ ì¢…ë£Œ");
 
 	}
 
@@ -66,7 +60,7 @@ public class Main {
 		List<SoccerPlayer> list = new ArrayList<SoccerPlayer>();
 
 		try {
-			System.out.print("µæÁ¡¿Õ : 1 , ¾î½Ã¿Õ : 2 , Æä¾îÇÃ·¹ÀÌ¾î : 3 >> ");
+			System.out.print("ë“ì ì™• : 1 , ì–´ì‹œì™• : 2 , í˜ì–´í”Œë ˆì´ì–´ : 3 >> ");
 			int type = sc.nextInt();
 
 			boolean value = checkInputPattern(String.valueOf(type), 5);
@@ -79,22 +73,22 @@ public class Main {
 			list = dbc.selectMaxMin(type);
 
 			if (list.size() <= 0) {
-				System.out.println("°Ë»öÇÑ ¼±¼öÁ¤º¸°¡ ¾ø½À´Ï´Ù." + list.size());
+				System.out.println("ê²€ìƒ‰í•œ ì„ ìˆ˜ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤." + list.size());
 				return;
 			}
 			
 			dbc.close();
 
 		} catch (InputMismatchException e) {
-			System.out.println("Å¸ÀÔÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. ÀçÀÔ·Â¿äÃ»" + e.getMessage());
+			System.out.println("íƒ€ì…ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. ì¬ì…ë ¥ìš”ì²­" + e.getMessage());
 			return;
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ÇĞ»ıÅë°è ¿¡·¯" + e.getMessage());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ í•™ìƒí†µê³„ ì—ëŸ¬" + e.getMessage());
 		}
 
 	}
 
-	// Á¤·Ä
+	// ì •ë ¬
 	private static void sortPlayerData() {
 		List<SoccerPlayer> list = new ArrayList<SoccerPlayer>();
 
@@ -102,11 +96,11 @@ public class Main {
 			DBConnection dbc = new DBConnection();
 			dbc.connect();
 
-			// ¼öÁ¤ÇÒ ÇĞ»ı ¹øÈ£ ÀÔ·Â
-			System.out.print("Á¤·Ä¹æ½Ä¼±ÅÃ(1.goal 2.assist 3.point) >> ");
+			// ìˆ˜ì •í•  í•™ìƒ ë²ˆí˜¸ ì…ë ¥
+			System.out.print("ì •ë ¬ë°©ì‹ì„ íƒ(1.goal 2.assist 3.point) >> ");
 			int type = sc.nextInt();
 
-			// ¹øÈ£ ÆĞÅÏ°Ë»ö
+			// ë²ˆí˜¸ íŒ¨í„´ê²€ìƒ‰
 			boolean value = checkInputPattern(String.valueOf(type), 4);
 			if (!value)
 				return;
@@ -114,30 +108,30 @@ public class Main {
 			list = dbc.selectOrderBy(type);
 
 			if (list.size() <= 0) {
-				System.out.println("º¸¿©ÁÙ list°¡ ¾ø½À´Ï´Ù." + list.size());
+				System.out.println("ë³´ì—¬ì¤„ listê°€ ì—†ìŠµë‹ˆë‹¤." + list.size());
 				return;
 			}
-			System.out.println("ÀÌ¸§\tÆÀ\t°ñ\t¾î½Ã½ºÆ®\tÆÄ¿ï\t°ø°İÆ÷ÀÎÆ®\tµî¼ö");
+			System.out.println("ì´ë¦„\tíŒ€\tê³¨\tì–´ì‹œìŠ¤íŠ¸\tíŒŒìš¸\tê³µê²©í¬ì¸íŠ¸\të“±ìˆ˜");
 			for (SoccerPlayer soccerPlayer : list) {
 				System.out.println(soccerPlayer);
 			}
 			dbc.close();
 
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º Á¤·Ä ¿¡·¯" + e.getMessage());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì •ë ¬ ì—ëŸ¬" + e.getMessage());
 		}
 		return;
 
 	}
 
-	// ¼öÁ¤
+	// ìˆ˜ì •
 	public static void UpdatePlayerData() {
 		List<SoccerPlayer> list = new ArrayList<SoccerPlayer>();
 		try {
-			// ¼öÁ¤ÇÒ ÇĞ»ı ¹øÈ£ ÀÔ¤©·Â
-			System.out.print("¼±¼ö ÀÌ¸§ ÀÔ·Â >> ");
+			// ìˆ˜ì •í•  í•™ìƒ ë²ˆí˜¸ ì…ã„¹ë ¥
+			System.out.print("ì„ ìˆ˜ ì´ë¦„ ì…ë ¥ >> ");
 			String name = sc.nextLine();
-			// ¹øÈ£ ÆĞÅÏ°Ë»ö
+			// ë²ˆí˜¸ íŒ¨í„´ê²€ìƒ‰
 			boolean value = checkInputPattern(name, 2);
 			if (!value)
 				return;
@@ -150,32 +144,32 @@ public class Main {
 			list = dbc.selectSearch(name);
 
 			if (list.size() <= 0) {
-				System.out.println("ÀÔ·ÂµÈ Á¤º¸°¡ ¾ø½À´Ï´Ù.");
+				System.out.println("ì…ë ¥ëœ ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.");
 			}
 
-			// ¸®½ºÆ® ³»¿ëÀ» º¸¿©ÁØ´Ù.
-			System.out.println("ÀÌ¸§\tÆÀ\t°ñ\t¾î½Ã½ºÆ®\tÆÄ¿ï\t°ø°İÆ÷ÀÎÆ®\tµî¼ö");
+			// ë¦¬ìŠ¤íŠ¸ ë‚´ìš©ì„ ë³´ì—¬ì¤€ë‹¤.
+			System.out.println("ì´ë¦„\tíŒ€\tê³¨\tì–´ì‹œìŠ¤íŠ¸\tíŒŒìš¸\tê³µê²©í¬ì¸íŠ¸\të“±ìˆ˜");
 			for (SoccerPlayer soccerPlayer : list) {
 				System.out.println(soccerPlayer);
 			}
 
-			// ¼öÁ¤ÇÒ ¸®½ºÆ®¸¦ º¸¿©Áà¾ß µÈ´Ù.
+			// ìˆ˜ì •í•  ë¦¬ìŠ¤íŠ¸ë¥¼ ë³´ì—¬ì¤˜ì•¼ ëœë‹¤.
 			SoccerPlayer imsiSoccerPlayer = list.get(0);
-			System.out.print("°ñ ¼ö ÀÔ·Â >>");
+			System.out.print("ê³¨ ìˆ˜ ì…ë ¥ >>");
 			int goal = sc.nextInt();
 			value = checkInputPattern(String.valueOf(goal), 3);
 			if (!value)
 				return;
 			imsiSoccerPlayer.setGoal(goal);
 
-			System.out.print("¾î½Ã½ºÆ® ¼ö ÀÔ·Â >>");
+			System.out.print("ì–´ì‹œìŠ¤íŠ¸ ìˆ˜ ì…ë ¥ >>");
 			int assist = sc.nextInt();
 			value = checkInputPattern(String.valueOf(assist), 3);
 			if (!value)
 				return;
 			imsiSoccerPlayer.setAssist(assist);
 
-			System.out.print("ÆÄ¿ï ¼ö ÀÔ·Â >>");
+			System.out.print("íŒŒìš¸ ìˆ˜ ì…ë ¥ >>");
 			int foul = sc.nextInt();
 			value = checkInputPattern(String.valueOf(foul), 3);
 			if (!value)
@@ -185,32 +179,32 @@ public class Main {
 			
 			imsiSoccerPlayer.calPoint();
 
-			// µ¥ÀÌÅÍº£ÀÌ½º ¼öÁ¤ÇÒ ºÎºĞÀ» update ÁøÇà
+			// ë°ì´í„°ë² ì´ìŠ¤ ìˆ˜ì •í•  ë¶€ë¶„ì„ update ì§„í–‰
 			int returnUpdateValue = dbc.update(imsiSoccerPlayer);
 			if (returnUpdateValue == -1) {
-				System.out.println("¼±¼ö ¼öÁ¤ Á¤º¸ ¾øÀ½");
+				System.out.println("ì„ ìˆ˜ ìˆ˜ì • ì •ë³´ ì—†ìŒ");
 				return;
 			}
-			System.out.println("¼±¼ö Á¤º¸ ¼öÁ¤ ¿Ï·áÇÏ¿´½À´Ï´Ù.");
+			System.out.println("ì„ ìˆ˜ ì •ë³´ ìˆ˜ì • ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤.");
 
 			dbc.close();
 
 		} catch (InputMismatchException e) {
-			System.out.println("ÀÔ·Â Å¸ÀÔ ¸ÂÁö ¾ÊÀ½. ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä");
+			System.out.println("ì…ë ¥ íƒ€ì… ë§ì§€ ì•ŠìŒ. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš”");
 			sc.nextLine();
 			return;
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º »èÁ¦ ¿¡·¯ . ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä");
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì‚­ì œ ì—ëŸ¬ . ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš”");
 			return;
 		}
 	}
 
-	// °Ë»ö
+	// ê²€ìƒ‰
 	private static void searchPlayerData() {
 		List<SoccerPlayer> list = new ArrayList<SoccerPlayer>();
 
 		try {
-			System.out.print("°Ë»öÇÒ ¼±¼ö ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä : ");
+			System.out.print("ê²€ìƒ‰í•  ì„ ìˆ˜ ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš” : ");
 			String name = sc.nextLine();
 
 			boolean value = checkInputPattern(name, 2);
@@ -222,24 +216,24 @@ public class Main {
 			dbc.connect();
 			list = dbc.selectSearch(name);
 			if (list.size() <= 0) {
-				System.out.println("º¸¿©ÁÙ list°¡ ¾ø½À´Ï´Ù." + list.size());
+				System.out.println("ë³´ì—¬ì¤„ listê°€ ì—†ìŠµë‹ˆë‹¤." + list.size());
 				return;
 			}
-			System.out.println("ÀÌ¸§\tÆÀ\t°ñ\t¾î½Ã½ºÆ®\tÆÄ¿ï\t°ø°İÆ÷ÀÎÆ®\tµî¼ö");
+			System.out.println("ì´ë¦„\tíŒ€\tê³¨\tì–´ì‹œìŠ¤íŠ¸\tíŒŒìš¸\tê³µê²©í¬ì¸íŠ¸\të“±ìˆ˜");
 			for (SoccerPlayer soccerPlayer : list) {
 				System.out.println(soccerPlayer);
 			}
 			dbc.close();
 
 		} catch (InputMismatchException e) {
-			System.out.println("Å¸ÀÔÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. ÀçÀÔ·Â¿äÃ»" + e.getStackTrace());
+			System.out.println("íƒ€ì…ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. ì¬ì…ë ¥ìš”ì²­" + e.getStackTrace());
 			return;
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º °Ë»ö ¿¡·¯" + e.getStackTrace());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ê²€ìƒ‰ ì—ëŸ¬" + e.getStackTrace());
 		}
 	}
 
-	// Ãâ·Â
+	// ì¶œë ¥
 	private static void playerOutput() {
 		List<SoccerPlayer> list = new ArrayList<SoccerPlayer>();
 		try {
@@ -248,25 +242,25 @@ public class Main {
 			dbc.connect();
 			list = dbc.select();
 			if (list.size() <= 0) {
-				System.out.println("º¸¿©ÁÙ list°¡ ¾ø½À´Ï´Ù." + list.size());
+				System.out.println("ë³´ì—¬ì¤„ listê°€ ì—†ìŠµë‹ˆë‹¤." + list.size());
 				return;
 			}
-			System.out.println("ÀÌ¸§\tÆÀ\t°ñ\t¾î½Ã½ºÆ®\tÆÄ¿ï\t°ø°İÆ÷ÀÎÆ®\tµî¼ö");
+			System.out.println("ì´ë¦„\tíŒ€\tê³¨\tì–´ì‹œìŠ¤íŠ¸\tíŒŒìš¸\tê³µê²©í¬ì¸íŠ¸\të“±ìˆ˜");
 			for (SoccerPlayer soccerPlayer : list) {
 				System.out.println(soccerPlayer);
 			}
 			dbc.close();
 
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º Ãâ·Â ¿¡·¯" + e.getMessage());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì¶œë ¥ ì—ëŸ¬" + e.getMessage());
 		}
 		return;
 	}
 
-	// »èÁ¦
+	// ì‚­ì œ
 	private static void deletePlayerData() {
 		try {
-			System.out.print("»èÁ¦ÇÒ ¼±¼ö¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä : ");
+			System.out.print("ì‚­ì œí•  ì„ ìˆ˜ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš” : ");
 			String name = sc.nextLine();
 
 			boolean value = checkInputPattern(name, 2);
@@ -278,25 +272,25 @@ public class Main {
 			dbc.connect();
 			int insertReturnValue = dbc.delete(name);
 			if (insertReturnValue == -1) {
-				System.out.println("»èÁ¦½ÇÆĞÀÔ´Ï´Ù." + insertReturnValue);
+				System.out.println("ì‚­ì œì‹¤íŒ¨ì…ë‹ˆë‹¤." + insertReturnValue);
 			}
 			if (insertReturnValue == 0) {
-				System.out.println("»èÁ¦ÇÒ ¼±¼ö°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù." + insertReturnValue);
+				System.out.println("ì‚­ì œí•  ì„ ìˆ˜ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤." + insertReturnValue);
 			} else {
-				System.out.println("»èÁ¦¼º°øÀÔ´Ï´Ù. ¸®ÅÏ°ª = " + insertReturnValue);
+				System.out.println("ì‚­ì œì„±ê³µì…ë‹ˆë‹¤. ë¦¬í„´ê°’ = " + insertReturnValue);
 			}
 
 			dbc.close();
 
 		} catch (InputMismatchException e) {
-			System.out.println("Å¸ÀÔÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. ÀçÀÔ·Â¿äÃ»" + e.getStackTrace());
+			System.out.println("íƒ€ì…ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. ì¬ì…ë ¥ìš”ì²­" + e.getStackTrace());
 			return;
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º »èÁ¦ ¿¡·¯" + e.getStackTrace());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì‚­ì œ ì—ëŸ¬" + e.getStackTrace());
 		}
 	}
 
-	// ÀÔ·Â
+	// ì…ë ¥
 	private static void playerInputData() {
 
 		String pattern = null;
@@ -304,37 +298,37 @@ public class Main {
 
 		try {
 
-			System.out.print("ÀÌ¸§ÀÔ·Â : ");
+			System.out.print("ì´ë¦„ì…ë ¥ : ");
 			String name = sc.nextLine();
 			boolean value = checkInputPattern(name, 2);
 			if (!value)
 				return;
 
-			System.out.print("ÆÀÀÔ·Â : ");
+			System.out.print("íŒ€ì…ë ¥ : ");
 			String team = sc.nextLine();
 			value = checkInputPattern(team, 2);
 			if (!value)
 				return;
 
-			System.out.print("goalÀÔ·Â : ");
+			System.out.print("goalì…ë ¥ : ");
 			int goal = sc.nextInt();
 			value = checkInputPattern(String.valueOf(goal), 3);
 			if (!value)
 				return;
 
-			System.out.print("assistÀÔ·Â : ");
+			System.out.print("assistì…ë ¥ : ");
 			int assist = sc.nextInt();
 			value = checkInputPattern(String.valueOf(assist), 3);
 			if (!value)
 				return;
 
-			System.out.print("foulÀÔ·Â : ");
+			System.out.print("foulì…ë ¥ : ");
 			int foul = sc.nextInt();
 			value = checkInputPattern(String.valueOf(foul), 3);
 			if (!value)
 				return;
 
-			// µ¥ÀÌÅÍº£ÀÌ½º ÀÔ·Â
+			// ë°ì´í„°ë² ì´ìŠ¤ ì…ë ¥
 			SoccerPlayer soccerPlayer = new SoccerPlayer(name, team, goal, assist, foul);
 			soccerPlayer.calPoint();
 
@@ -345,36 +339,36 @@ public class Main {
 			int insertReturnValue = dbc.insert(soccerPlayer);
 
 			if (insertReturnValue == -1) {
-				System.out.println("»ğÀÔ½ÇÆĞÀÔ´Ï´Ù.");
+				System.out.println("ì‚½ì…ì‹¤íŒ¨ì…ë‹ˆë‹¤.");
 			} else {
-				System.out.println("»ğÀÔ¼º°øÀÔ´Ï´Ù. ¸®ÅÏ°ª=" + insertReturnValue);
+				System.out.println("ì‚½ì…ì„±ê³µì…ë‹ˆë‹¤. ë¦¬í„´ê°’=" + insertReturnValue);
 			}
 			dbc.close();
 
 		} catch (InputMismatchException e) {
-			System.out.println("ÀÔ·ÂÅ¸ÀÔÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù. ÀçÀÔ·Â¿äÃ»" + e.getStackTrace());
+			System.out.println("ì…ë ¥íƒ€ì…ì´ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤. ì¬ì…ë ¥ìš”ì²­" + e.getStackTrace());
 			return;
 		} catch (Exception e) {
-			System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ÀÔ·Â ¿¡·¯" + e.getStackTrace());
+			System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì…ë ¥ ì—ëŸ¬" + e.getStackTrace());
 		} finally {
 			sc.nextLine();
 		}
 
 	}
 
-	// ¸Ş´º¼±ÅÃ
+	// ë©”ë‰´ì„ íƒ
 	public static int displayMenu() {
 		int num = -1;
 
 		try {
-			System.out.print("1.ÀÔ·Â 2.¼öÁ¤ 3.»èÁ¦ 4.°Ë»ö 5.Ãâ·Â 6.Á¤·Ä 7.Åë°è 8.Á¾·á : ");
+			System.out.print("1.ì…ë ¥ 2.ìˆ˜ì • 3.ì‚­ì œ 4.ê²€ìƒ‰ 5.ì¶œë ¥ 6.ì •ë ¬ 7.í†µê³„ 8.ì¢…ë£Œ : ");
 			num = sc.nextInt();
 
 			String pattern = "^[1-8]$";
 			boolean regex = Pattern.matches(pattern, String.valueOf(num));
 		} catch (InputMismatchException e) {
 			System.out.println();
-			System.out.println("¼ıÀÚ·Î ÀÔ·ÂÇØÁÖ¼¼¿ä");
+			System.out.println("ìˆ«ìë¡œ ì…ë ¥í•´ì£¼ì„¸ìš”");
 			num = -1;
 		} finally {
 			sc.nextLine();
@@ -388,21 +382,21 @@ public class Main {
 		String message = null;
 		switch (patternType) {
 		case 2:
-			pattern = "^[°¡-ÆR]{2,10}$";
-			message = "name ÀçÀÔ·Â¿ä¸Á";
+			pattern = "^[ê°€-R]{2,10}$";
+			message = "name ì¬ì…ë ¥ìš”ë§";
 			break;
 		case 3:
 			pattern = "^[0-9]{1,3}$";
-			message = "score ÀçÀÔ·Â¿ä¸Á";
+			message = "score ì¬ì…ë ¥ìš”ë§";
 
 			break;
 		case 4:
 			pattern = "^[1-3]$";
-			message = "Á¤·ÄÅ¸ÀÔ ÀçÀÔ·Â¿ä¸Á";
+			message = "ì •ë ¬íƒ€ì… ì¬ì…ë ¥ìš”ë§";
 			break;
 		case 5:
 			pattern = "^[1-3]$";
-			message = "Åë°èÅ¸ÀÔ ÀçÀÔ·Â¿ä¸Á";
+			message = "í†µê³„íƒ€ì… ì¬ì…ë ¥ìš”ë§";
 		
 		}
 
