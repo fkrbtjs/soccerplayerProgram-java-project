@@ -1,8 +1,8 @@
 package soccer;
 
-public class SoccerPlayer implements Comparable<SoccerPlayer> {
+public class SoccerPlayer implements Comparable<SoccerPlayer>,SoccerPlayerComponent {
 
-	//ÇÊµå ÀÌ¸§ , ÆÀ , °ñ , ¾î½Ã½ºÆ® , ¹İÄ¢ , °ø°İÆ÷ÀÎÆ® , ¼øÀ§
+	//í•„ë“œ ì´ë¦„ , íŒ€ , ê³¨ , ì–´ì‹œìŠ¤íŠ¸ , ë°˜ì¹™ , ê³µê²©í¬ì¸íŠ¸ , ìˆœìœ„
 	
 	private String name;
 	private String team;
@@ -145,7 +145,11 @@ public class SoccerPlayer implements Comparable<SoccerPlayer> {
 		return this.name.compareToIgnoreCase(soccerPlayer.name);
 	}
 	
-	
+	@Override
+    public void display() {
+        System.out.println(name + "\t" + team + "\t" + goal + "\t" + assist + "\t"
+                + foul + "\t" + point + "\t" + rate);
+    }
 	
 	
 	
